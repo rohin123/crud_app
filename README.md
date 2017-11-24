@@ -1,5 +1,5 @@
 # crud_app
-#run app <br/>
+#run app on localhost:3333<br/>
 node server.js<br/>
 
 #build app<br/>
