@@ -3,6 +3,6 @@
 node server.js<br/>
 
 #build app<br/>
-npm install
+npm install<br/>
 webpack
 
