@@ -5,7 +5,7 @@ import DateComponent from 'react-datepicker'
 import moment from 'moment'
 
 const render = function(){
-	console.log('edituser render',this.props.user)
+	//console.log('edituser render',this.validState)
 	let user = this.props.user,
 		innerHtml = null,
 		userActive = user.active === true ? true : false;

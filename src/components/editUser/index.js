@@ -63,7 +63,8 @@ const EditUser = React.createClass({
 		this.isUpdated = true
 		this.editEmpObj.dob = date
 		this.validState['dob'] = {
-				valid:CommonFunc.checkDobwithAge(this.editEmpObj['dob'],this.editEmpObj['age']),
+				valid:CommonFunc.checkDobwithAge(this.editEmpObj['dob'],this.editEmpObj['age']||
+						this.props.user.age),
 				isPristine:false
 			}
 		this.setState({
