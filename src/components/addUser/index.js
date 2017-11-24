@@ -1,106 +1,111 @@
 import React from 'react'
 import Template from './template.jsx'
-import {} from '../../../style/addUser.scss'
 import {} from '../../../style/editUser.scss'
+import {} from '../../../style/react-datepicker.scss'
+import {} from '../../../style/addUser.scss'
 import CommonFunc from '../../helpers/commonFunc.js'
-import UserActions from '../../actions/userActions.js'
+import moment from 'moment'
+import EmployeeActions from '../../actions/employeeActions.js'
 
 const AddUser = React.createClass({
 	getInitialState:function(){
 		const {store} = this.context
 		this.store = store
-		this.userDetails = {}
-		this.roleDetails = {}
-		this.invalidState = {
-			user_name:true,
-			name: true,
-			password: true,
-			email: true,
-			code: true
+		this.gender = 'male'
+		//this.selectedDate = moment()
+		this.invalidDateMssg = 'D.O.B and age mismatch'
+		this.validState = {
+			first_name:{
+					valid:false,
+					isPristine:true
+				},
+			last_name: {
+					valid:false,
+					isPristine:true
+				},
+			email: {
+					valid:false,
+					isPristine:true
+				},
+			age: {
+					valid:false,
+					isPristine:true
+				},
+			dob:{
+				valid:false,
+				isPristine:true
+			}	
 		}
+		this.newEmp = {}
 		return {
 			reRender:false
 		}
 	},
 	componentWillMount:function(){
-		this.rolesMap = this.initRolesMap()
 	},
 	checkValidSave:function(){
-		let inputs = (Object.keys(this.invalidState))||[]
+		console.log(this.validState)
+		let inputs = (Object.keys(this.validState))||[]
 		for(var i = 0 ;i<inputs.length;i++){
-			if(this.invalidState[inputs[i]]){
-				this.isValidSave = false
-				this.setState({
-					reRender:true
-				})
-				return
+			if(!this.validState[inputs[i]].valid){
+				return false
 			}
 		}
-		//console.log('here')
-		if(Object.keys(this.userDetails).length){
-			this.isValidSave = true
-			this.setState({
-				reRender:true
-			})
-		}else{
-			this.isValidSave = false
-			this.setState({
-				reRender:true
-			})
+		return true
+	},
+	setEmployeeDetails:function(key,value,valid){
+		if(valid){
+			this.newEmp[key] = value	
 		}
-	},
-	initRolesMap:function(){
-		let rolesMap = {}
-		let allRoles = this.store.getState().roles||[]
-		for(var i = 0 ;i < allRoles.length; i++){
-			rolesMap[allRoles[i].name] = false
+		this.validState[key] = {
+			valid:valid,
+			isPristine:false
 		}
-		return rolesMap
-	},
-	addUserBasicDetails:function(name,val){
-		this.userDetails[name] = CommonFunc.stripLeadAndTerminalSpaces(val)
-		this.checkValidSave()
-	},
-	addUserEmpDetails:function(name,val){
-		if(!this.userDetails['user_details']){
-			this.userDetails['user_details'] = {}
-		}
-		this.userDetails['user_details'][name] = CommonFunc.stripLeadAndTerminalSpaces(val)
-		this.checkValidSave()
-	},
-	addUserBankDetails:function(name,val){
-		if(!this.userDetails['bank_details']){
-			this.userDetails['bank_details'] = {}
-		}
-		this.userDetails['bank_details'][name] = CommonFunc.stripLeadAndTerminalSpaces(val)
-		this.checkValidSave()
-	},
-	addUserRoles:function(data){
-		//debugger
-		this.rolesMap = data
-		let userRoles = this.getSelectedRoles()
-		this.roleDetails = {
-			role:userRoles
-		}
-		this.checkValidSave()
-	},
-	getSelectedRoles:function(){
-		let ret = [];
-		(Object.keys(this.rolesMap)||[]).map((role)=>{
-			if(this.rolesMap[role]){
-				ret.push(role)
+		if(key=='age'&&this.newEmp.dob){
+			this.validState['dob'] = {
+				valid:CommonFunc.checkDobwithAge(this.newEmp.dob,this.newEmp.age),
+				isPristine:this.validState['dob'].isPristine
 			}
+		}
+		this.setState({
+			reRender:true
 		})
-		return ret
+	},
+	selectGender:function(evt){
+		console.log(evt.target.value,evt.target.name)
+		this.gender = evt.target.value
 	},
 	saveUser:function(){
-		console.log(this.userDetails,this.roleDetails)
-		this.store.dispatch(UserActions.saveUser(this.userDetails,this.roleDetails))
+		console.log(this.newEmp)
+		this.newEmp.id = new Date().getTime()
+		this.newEmp.gender = this.gender
+		this.store.dispatch(EmployeeActions.saveEmployee(this.newEmp))
 		this.props.close()
 	},
-	setInvalid:function(name,val){
-		this.invalidState[name] = val
-		this.checkValidSave()
+	handleDobSelect:function(date){
+		this.selectedDate = date
+		this.newEmp['dob'] = date
+		this.validState['dob'] = {
+			valid:CommonFunc.checkDobwithAge(date,this.newEmp.age),
+			isPristine:false
+		}
+
+		this.setState({
+			reRender:true
+		})
+	},
+	openCalender:function(){
+		this.showCalender = true
+		this.setState({
+			reRender:true
+		})
+	},
+	calenderClosed: function(){
+		console.log('----calenderClose---');
+		this.showCalender = false;
+		this.setState({
+			reRender:true
+		})
 	},
 	render:Template
 })

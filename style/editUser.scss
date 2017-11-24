@@ -3,11 +3,24 @@
 
 .edit-user-div,.add-user-div{
 	padding: 5px;
-    @include box-shadow(1px 1px 6px 1px #c3c3c3);
+    //@include box-shadow(1px 1px 6px 1px #c3c3c3);
     margin-bottom: 15px;
     background-color: white;
-    overflow: hidden;
     position: relative;
+    text-align: left;
+
+    .gender-select{
+	    width: 69px;
+	    padding: 10px 13px;
+	    -webkit-appearance: none;
+	    -moz-appearance: none;
+	    appearance: none;
+	    outline: none;
+	    margin: 10px 100px 10px 10px;
+	    border-color: #c0c0c0;
+	    background-color: whitesmoke;
+    }
+
 	h2{
 		margin: 10px 0;
 	    font-weight: 300;
@@ -27,7 +40,6 @@
 		outline: none;
 		cursor: pointer;
 		padding: 8px;
-		background-color: #40a010;
 		margin-right: 10px;
 	}
 	.reset-pass-button{
@@ -60,5 +72,22 @@
 		background: #f34b4b;
 		color: white;
 		font-size: .8rem;
+	}
+	.dob-div{
+		position: relative;
+		label{
+		    position: absolute;
+		    top: -5px;
+		    left: 10px;
+		    font-size: 13px;
+		    color: gray;
+		}
+		span{
+			position: absolute;
+		    bottom: -4px;
+		    left: 10px;
+		    font-size: 11px;
+		    color: red;
+		}
 	}
 }

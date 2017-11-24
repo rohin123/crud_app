@@ -2,8 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-//const CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
-//var importer = require("node-sass-importer");
+
 
 module.exports = {
     context:path.resolve(__dirname),
@@ -33,32 +32,10 @@ module.exports = {
               test: /\.js$/,
               //include: CLIENT_DIR,
               loader: 'babel-loader',
-               // query: {
-               //   //presets: ['es2015', 'react']
-               //   //"presets": ["env"]
-               //   "presets": [
-               //          ["env", {
-               //            "targets": {
-               //              "browsers": ["last 2 versions"]
-               //            }
-               //          }]
-               //        ]
-               // }
             },
             {
               test: /\.jsx?$/,
                   loader: 'babel-loader',
-                   // query: {
-                   //   //presets: ['es2015','react']
-                   //  //"presets": ["env"]
-                   //  "presets": [
-                   //      ["env", {
-                   //        "targets": {
-                   //          "browsers": ["last 2 versions"]
-                   //        }
-                   //      }]
-                   //    ]
-                   // }
             },
             {
                 test: /\.scss$/,

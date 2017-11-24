@@ -1,100 +1,98 @@
 import React from 'react'
 import LabeledInput from '../labeledInput'
-import MultiSelect from '../multiSelect'
 import AppData from '../../utils/appData.js'
-import RoleSelection from '../roleselection'
-import {Dropdown, MenuItem, DropdownToggle, DropdownMenu} from '../../modules/dropDown';
+import DateComponent from 'react-datepicker'
+import moment from 'moment'
 
 const render = function(){
+	console.log('edituser render',this.props.user)
 	let user = this.props.user,
 		innerHtml = null,
 		userActive = user.active === true ? true : false;
-
-	let blockedLabel = userActive ? undefined : (<div className="blocked-label">Blocked</div>);
 	
 		innerHtml = (
 			<div>
-				{blockedLabel}
-				<h2>User Details</h2>
+				<h2>Employee Details</h2>
 				<div className='user-details-div'>
-					<LabeledInput label={'Name'} name={'name'} value={user.name||undefined} type={'text'} 
-									changeHandler={this.editUserBasicDetails}
-									readonly={ !userActive }/>
-					<LabeledInput label={'User Name'} name={'user_name'} value={user.user_name||undefined} 
-									type={'text'} changeHandler={this.editUserBasicDetails} readonly={true}/>
-					<LabeledInput label={'Phone Number'} name={'phone_number'} value={user.phone_number||undefined} 
-									type={'text'} changeHandler={this.editUserBasicDetails}
-									validationArr={[{key:AppData.inputValidations.NUMBER}]}
-									setInvalid={this.setInvalid}
-									readonly={ !userActive }/>
-					<LabeledInput label={'Email'} name={'email'} value={user.email||undefined} type={'text'} 
-									changeHandler={this.editUserBasicDetails}
-									validationArr={[{key:AppData.inputValidations.EMAIL}]}
-									setInvalid={this.setInvalid}
-									readonly={ !userActive }/>
-					<LabeledInput label={'Employee Code'} name={'code'} 
-									value={(user.user_details&&user.user_details.code)||undefined} type={'text'} 
-									changeHandler={this.editUserEmpDetails}
-									readonly={true}/>
-					<LabeledInput label={'Designation'} name={'designation'} 
-									value={(user.user_details&&user.user_details.designation)||undefined} type={'text'} 
-									changeHandler={this.editUserEmpDetails}
-									readonly={ !userActive }/>
-					<LabeledInput label={'Department'} name={'department'} 
-									value={(user.user_details&&user.user_details.department)||undefined} type={'text'} 
-									changeHandler={this.editUserEmpDetails}
-									readonly={ !userActive }/>
-					<LabeledInput label={'Bank Name'} name={'bank_name'} 
-									value={(user.bank_details&&user.bank_details.bank_name)||undefined} type={'text'} 
-									changeHandler={this.editUserBankDetails}/>
-					<LabeledInput label={'Beneficiary Name'} name={'beneficiary_name'} 
-									value={(user.bank_details&&user.bank_details.beneficiary_name)||undefined} type={'text'} 
-									changeHandler={this.editUserBankDetails}
-									readonly={ !userActive }/>
-					<LabeledInput label={'Account Number'} name={'account_number'} 
-									value={(user.bank_details&&user.bank_details.account_number)||undefined} type={'text'} 
-									changeHandler={this.editUserBankDetails}
-									validationArr={[{key:AppData.inputValidations.NUMBER}]}
-									setInvalid={this.setInvalid}
-									readonly={ !userActive }/>
-					<LabeledInput label={'Ifsc Code'} name={'ifsc_code'} 
-									value={(user.bank_details&&user.bank_details.ifsc_code)||undefined} type={'text'} 
-									changeHandler={this.editUserBankDetails}/>																													
-					<LabeledInput label={'New Password'} name={'password'} 
-									type={'password'} 
-									changeHandler={this.editUserBasicDetails}
-									readonly={ !userActive }/>																												
+					<LabeledInput label={'First Name'} name={'first_name'} type={'text'} 
+									changeHandler={this.setEmployeeDetails}
+									value={this.getValue('first_name')}
+									validationArr={[{	key:AppData.inputValidations.REQUIRED},
+													{	key:AppData.inputValidations.REGEX,
+														regex:"^\\w+$",
+														mssg:'Spaces inbetween not allowed'
+													}
+												]}
+									isValid = {this.validState['first_name'].isPristine ||
+													this.validState['first_name'].valid}/>
+					<LabeledInput label={'Last Name'} name={'last_name'} 
+									type={'text'} changeHandler={this.setEmployeeDetails}
+									value={this.getValue('last_name')}
+									validationArr={[{	key:AppData.inputValidations.REQUIRED},
+													{	key:AppData.inputValidations.REGEX,
+														regex:"^\\w+$",
+														mssg:'Spaces inbetween not allowed'
+													}
+												]}
+									isValid = {this.validState['last_name'].isPristine||
+												this.validState['last_name'].valid}/>		
+					<LabeledInput label={'Email'} name={'email'} type={'text'} 
+									changeHandler={this.setEmployeeDetails}
+									value={this.getValue('email')}
+									validationArr={[{key:AppData.inputValidations.REQUIRED},
+													{key:AppData.inputValidations.EMAIL}
+												]}
+									isValid = {this.validState['email'].isPristine||
+												this.validState['email'].valid}/>
+					<LabeledInput label={'Age'} name={'age'} 
+									type={'text'} 
+									value={this.getValue('age')}
+									changeHandler={this.setEmployeeDetails}
+									validationArr={[{	key:AppData.inputValidations.REQUIRED},
+													{	key:AppData.inputValidations.REGEX,
+														regex:"^[1-9][0-9]$",
+														mssg:"Number between 10 to 99 allowed"
+													}]}
+									isValid = {this.validState['age'].isPristine||
+												this.validState['age'].valid}/>	
+					<div className='inline-display dob-div'>												
+						<DateComponent selected={this.editEmpObj.dob||moment(user.dob)}
+									    onChange={this.handleDobSelect}
+	  									maxDate={moment()}
+	  									placeholderText="Date of Birth"
+	  									peekNextMonth
+	    								showMonthDropdown
+	    								showYearDropdown
+	   									dropdownMode="select"/>	
+	   					<label>Date of Birth</label>
+	   					{this.validState['dob'].valid?null:<span>{this.invalidDateMssg}</span>}				
+	   				</div>
+	   				<div className='inline-display'>
+	   					<select className='gender-select'
+	   						name='gender' 
+	   						onChange={this.selectGender}
+	   						value={this.editEmpObj.gender||user.gender}>
+	   						<option value='male'>male</option>
+	   						<option value='female'>female</option>
+	   					</select>
+	   				</div>																																
 				</div>
-
-				<h2>USER ROLES</h2>
-				<div className='roles-div'>
-					{/*<MultiSelect options={currRoles||[]} allOptions={availableRoles||[]} 
-									changeHandler={this.editUserRoles}/>*/}
-					<RoleSelection rolesMap={this.rolesMap} edit={this.editUserRoles} readonly={ !userActive }/>				
-				</div>	
-				<div className={this.isUpdated?'buttons-div':'hide'}>
-					<button className='button green-button edit-button' onClick={this.updateUser}>UPDATE</button>
-					<button className='button red-button edit-button' onClick={this.cancelUpdate}>CANCEL</button>
+				<div className='buttons-div'>
+					{(this.isUpdated)?
+						<button className={'button edit-button '+ (this.checkValidUpdate()?' green-button':'gray-button')} 
+							onClick={this.updateEmployee}>
+						UPDATE
+						</button>:null
+					}
+					{(this.isUpdated)?
+						<button className='button red-button edit-button' onClick={this.reset}>CANCEL</button>:
+						null
+					}
+					<button className='button red-button edit-button' onClick={this.removeEmployee}>DELETE</button>
 				</div>
-				<div className="dropdown-parent">
-					<Dropdown pullRight onSelect={ this.actionSelected }>
-						<DropdownToggle
-						btnStyle="flat">
-							Actions
-						</DropdownToggle>
-						<DropdownMenu>
-							<MenuItem header>Select Action</MenuItem>
-							<MenuItem divider />
-							<MenuItem eventKey={1}>{ userActive ? 'Block' : 'UnBlock' }</MenuItem>
-						</DropdownMenu>
-					</Dropdown>
-				</div>
-				
 			</div>
 		)
-	// }else{
-	// 	//innerHtml =	<div style={{"width":"100%","height":"50px"}}></div>
-	// }
+	
 	return <div ref={(elem)=>{this.compRef = elem}} className='edit-user-div' onClick={this.toggle}>
 					{innerHtml}
 			</div>

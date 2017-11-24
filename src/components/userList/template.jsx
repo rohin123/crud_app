@@ -5,15 +5,15 @@ const render =  function(){
 	let state = this.store.getState()
 	let	userListHtml = null
 	if(this.props.selectedUserId){
-		for(var i= 0; i<(state.users||[]).length;i++){
-			if(state.users[i].user_id == this.props.selectedUserId){
-				userListHtml = <EditUser user={state.users[i]} allRoles={state.roles||[]}/>
+		for(var i= 0; i<(state.employeesList||[]).length;i++){
+			if(state.employeesList[i].id == this.props.selectedUserId){
+				userListHtml = <EditUser user={state.employeesList[i]}/>
 				break
 			}
 		}
 	}else{
-		userListHtml = (state.users||[]).map((item,index)=>{
-			return <EditUser key={item._id} user={item} allRoles={state.roles||[]}/>
+		userListHtml = (state.employeesList||[]).map((item,index)=>{
+			return <EditUser key={item.id} user={item}/>
 		})
 	}
 	return (

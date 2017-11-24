@@ -33,7 +33,7 @@ const TopBar = React.createClass({
 	setUser:function(val){
 		console.log(val)
 		this.searchedUser = val.name
-		this.searchedUserId = val.user_id||null
+		this.searchedUserId = val.id||null
 		this.props.setUser(this.searchedUserId)
 	},
 	render:Template

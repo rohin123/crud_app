@@ -10,7 +10,8 @@ export default (()=>{
 			'REQUIRED':'value is required',
 			'NUMBER':'value is number',
 			'EMAIL':'value is email address',
-			'USERNAME': 'valus is username'
+			'USERNAME': 'value is username',
+			'REGEX':'regex'
 		},
 		validRole:'hr'
 	}

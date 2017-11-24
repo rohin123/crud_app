@@ -7,13 +7,22 @@ const LabeledInput = React.createClass({
 	getInitialState:function(){
 		this.labelClass=this.props.value?'label-up':'label-down'
 		this.isValid = true
-		this.errMsg = null
+		this.errMsg = 'Required Input'
+		this.inputVal = this.props.value
 		return {
 			reRender:false
 		}
 	},
+	componentWillReceiveProps:function(nextProps){
+		this.isValid = nextProps.isValid?true:false
+		this.inputVal = nextProps.value
+		this.setState({
+			reRender:true
+		})
+	},
 	changeHandler:function(name,e){
 		let val = e.target.value;
+		this.inputVal = val
 		if(this.props.validationArr&&this.props.validationArr.length){
 			let validState = this.checkVaildInput(val)
 			this.isValid = validState.valid
@@ -22,21 +31,16 @@ const LabeledInput = React.createClass({
 				reRender:true
 			})
 		}
-		if(this.isValid){
-			this.props.changeHandler(name,val)
-		}
-		if(this.props.setInvalid){
-			this.props.setInvalid(name,!this.isValid)
-		}
+		this.props.changeHandler(name,val,this.isValid)
 	},
 	checkVaildInput:function(val){
-		//debugger
 		let validationArr = this.props.validationArr||[],
 			op = null
 		for(var i = 0 ; i < validationArr.length ; i++){
 			let key = validationArr[i].key,
+				regex = validationArr[i].regex,
 				customMssg = validationArr[i].mssg||null
-			op = FormValidation.checkVaildInput(key,val)
+			op = FormValidation.checkVaildInput(key,val,regex)
 			if(!op.valid){
 				op.customMssg = customMssg
 				break

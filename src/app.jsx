@@ -5,13 +5,11 @@ import {
   Link
 } from 'react-router-dom'
 
-import LoginComponent from './components/loginComponent'
 import HomeComponent from './components/home'
 import {Provider} from 'react-redux'
 import store from './store/index.js'
 import Loader from './components/loaderComponent'
 import NotificationPanel from './components/notificationPanel'
-import AuthWrapper from './components/authWrapper'
 
 const render = function(){
 	console.log('main--->',store.getState())
@@ -20,8 +18,7 @@ const render = function(){
 	 				<div>
 	 					<Loader/>
 						<NotificationPanel/>
-						<Route exact path='/' component={AuthWrapper(HomeComponent)}/>
-	 					<Route path='/login' component={LoginComponent}/>
+						<Route exact path='/' component={HomeComponent}/>
 	 				</div>
 	 			</Provider>	
  			</Router>)

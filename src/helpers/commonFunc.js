@@ -1,6 +1,7 @@
 import store from '../store/index.js'
 import objectAssign from 'object-assign';
 import Appdata from '../utils/appData.js'
+import moment from 'moment'
 
 class CommonFunc{
 
@@ -137,6 +138,16 @@ class CommonFunc{
 
 	checkValidRole(role){
 		return role==Appdata.validRole
+	}
+
+	checkDobwithAge(dob,age){
+		if(dob&&age){
+			let now = moment()
+			let years = now.diff(dob,'years')
+			console.log('checkDobwithAge',years)
+			return (years == age)
+		}
+		return true
 	}
 
 }

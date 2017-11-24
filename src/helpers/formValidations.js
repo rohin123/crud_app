@@ -2,8 +2,8 @@ import AppData from '../utils/appData.js'
 import CommonFunc from './commonFunc.js'
 
 class FormValidations{
-	checkVaildInput(key,val){
-		console.log('input-->',key,val)
+	checkVaildInput(key,val,regex){
+		console.log('FormValidations-->',key,val,regex)
 		switch(key){
 			case AppData.inputValidations.REQUIRED:{
 				return {
@@ -32,6 +32,12 @@ class FormValidations{
 				return {
 					valid: valid,
 					defaultMssg: 'Only letters (a-z), numbers, and periods'
+				}
+			}
+
+			case AppData.inputValidations.REGEX:{
+				return {
+					valid:(new RegExp(regex).test(val))
 				}
 			}
 

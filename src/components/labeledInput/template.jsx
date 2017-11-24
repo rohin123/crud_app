@@ -6,7 +6,7 @@ const render = function(){
 				<div className='labeled-input-div'>
 					<label className={'label '+this.labelClass}>{props.label}</label>
 					<div className='input-div'>
-						<input type={props.type} defaultValue={props.value} 
+						<input type={props.type} value={this.inputVal} 
 									onChange={this.changeHandler.bind(this,props.name)} 
 									onFocus={this.focusHandler}
 									onBlur={this.blurHandler}

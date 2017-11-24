@@ -1,8 +1,10 @@
 import React from 'react'
 import Template from './template.jsx'
-import UserActions from '../../actions/userActions.js'
-import RoleActions from '../../actions/roleActions.js'
+//import UserActions from '../../actions/userActions.js'
+//import RoleActions from '../../actions/roleActions.js'
 import {} from '../../../style/userList.scss'
+import EmployeeActions from '../../actions/employeeActions.js'
+
 
 const UserList = React.createClass({
 	getInitialState:function(){
@@ -13,15 +15,17 @@ const UserList = React.createClass({
 		}
 	},
 	componentWillMount:function(){
-		this.store.subscribe(()=>{
+		this.unsub = this.store.subscribe(()=>{
 			this.setState({
 				reRender:true
 			})
 		})
 	},
 	componentDidMount:function(){
-		this.store.dispatch(UserActions.getUsers())
-		this.store.dispatch(RoleActions.getRoles())
+		this.store.dispatch(EmployeeActions.getEmployeesList())
+	},
+	componentWillUnmount:function(){
+		this.unsub()
 	},
 	render:Template
 })
